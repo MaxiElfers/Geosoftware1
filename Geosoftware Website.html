@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src = "point.js"></script>
+    <script src = "cities.js"></script>
+    <script src = "distance.js"></script>
+    <link rel="stylesheet" href="geosoftwareWebsiteCSS.css">
+</head>
+    <body>
+    <img id="IFGIimg" src="https://digitalautonomy.net/fileadmin/_processed_/d/4/csm_1623743845_DAH_Logo_ifgi_long_2b4c356743.png"></img>
+    <h1>Welcome to my website for Geosoftware SoSe 2022</h1>
+    <p>If you click the following button, you will get the result of task no.1</p>
+    <div id="ErsterButton"><button class="button" onclick="distanceCalculation() + hide() + show()" this.disabled = true;>Click here</button></div>
+    <script>
+        let distanceArray = cities;
+
+        // only for design purpose to hide the button after clicking it
+        function hide(){
+            document.getElementById("ErsterButton").style.display = "none";
+        }
+
+        // only for design purpose to show the return button after clicking the "show" button
+        function show(){
+            document.getElementById("ReturnButton").style.display = "block";
+        }
+
+        function distanceCalculation(){
+        // calculating the distances and storing them in an array
+        for(var i = 0; i < cities.length; i++){
+            var write = distance(cities[i]);
+            distanceArray[i] = write;
+        }
+
+        distanceArray.sort(function(a, b){return a - b}); // sorting the array 
+
+        // this is only for visualisation purposes 
+        for(var i = 0; i < distanceArray.length; i++){
+            distanceArray[i] = "<br><br>" + distanceArray[i];
+        }
+
+        // writing the distances in the correct order on the web page
+        document.getElementById('OutputLoesung').innerHTML = distanceArray + "<br><br>";
+
+    }
+    </script>
+    <div id="OutputLoesung"></div>
+    <div id="ReturnButton"><button class="button" onClick="window.location.reload();">Return</button></div>
+    </body>
+</html>
