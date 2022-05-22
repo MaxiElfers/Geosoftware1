@@ -1,0 +1,49 @@
+.button{
+    background-color: yellowgreen;
+    color:white;
+    border: none;
+    text-align: center;
+    padding: 15px 32px;
+    cursor: pointer;
+    font-size: large;
+}
+p{
+    color: rgb(49, 46, 46);
+    text-align: center;
+    font-size:x-large;
+}
+h1{
+    color: yellowgreen;
+    text-align: center;
+}
+#IFGIimg{
+    height: 100px;
+    float: right;
+    border: 0px;
+    margin: 0px;
+    position: absolute;
+}
+#OutputLoesung{
+    color: rgb(49, 46, 46);
+    text-align: center;
+    border: 5px;
+    margin: 5px;
+}
+#ErsterButton{
+    text-align: center;
+}
+#ReturnButton{
+    text-align: center;
+    display: none;
+}
+#GoButtonDiv{
+    text-align: center;
+    display: none;
+}
+#SubmitButtonDiv{
+    text-align: center;
+}
+#InputDiv{
+    text-align: center;
+    margin: 5px;
+}
