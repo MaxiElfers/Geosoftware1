@@ -10,20 +10,21 @@ let distanceArrayShort = [];
 let bushalteStellen;
 let abfahrten;
 let aktBushalte;
+let meinStandortMarker;
 
 //list of all EventListeners
 document.getElementById("ReturnButton").addEventListener("click", function(){window.location.reload()});
 document.getElementById("ReturnButton2").addEventListener("click", function(){window.location.reload()});
 document.getElementById("YourLocation").addEventListener("click",function(){getLocation()});
-document.getElementById("SubmitButton").addEventListener("click",function(){loadBushalteStellenPromises(); displayStandortMap(); hide("SubmitButton"); show("GoButtonDiv"); hide("InputDiv"), show("ReturnButton2")});
-document.getElementById("GoButton").addEventListener("click",function(){distance(); displayShort(); hide("GoButtonDiv"); show("ReturnButton"); show("ReturnButton2"); show("AbfahrtenDiv"), loadAbfahrtenPromises(), show("KompletteDiv")});
-document.getElementById("AbfahrtenButton").addEventListener("click", function(){displayAbfahrten(), show("AbfahrtenText")})
-document.getElementById("KomplettButton").addEventListener("click", function(){displayKomplett()})
+document.getElementById("SubmitButton").addEventListener("click",function(){loadBushalteStellenPromises(); displayStandortMap(); hide("SubmitButton"); show("GoButtonDiv"); hide("InputDiv"), show("ReturnButton2"); show("ZoomDiv")});
+document.getElementById("GoButton").addEventListener("click",function(){distance(); displayAllBushalte(); hide("GoButtonDiv"); show("ReturnButton"); hide("ReturnButton2"); loadAbfahrtenPromises()});
+document.getElementById("ZoomButton").addEventListener("click", function(){showMeinStandort()})
 
 /**
  * Is the function to calculate all distances between a given bushalte Stellen 
  * and a given standort class
  */
+
 function distance(){
     for(var i = 0; i < bushalteStellen.features.length; i++){
         aktBushalte = new Bushalte(bushalteStellen.features[i].properties.richtung, bushalteStellen.features[i].properties.lbez, bushalteStellen.features[i].geometry.coordinates[0], bushalteStellen.features[i].geometry.coordinates[1], bushalteStellen.features[i].properties.nr);
@@ -61,33 +62,9 @@ function distance(){
             Math.cos(lat1) * Math.cos(lat2) *
             Math.sin(lonRechner/2) * Math.sin(lonRechner/2);
     let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    console.log(c);
     let d = R * c;
     
     return d; // returns the distance in metres
-}
-
-/**
- * Displayes the abfahrten from the API on the website
- */
- function displayAbfahrten(){
-    var abfahrtenArray = [];
-    for(var i = 0; i < abfahrten.length; i++){
-        abfahrtenArray[i] = "Linie " + abfahrten[i].linienid + " Richtung: " + abfahrten[i].richtungstext + " In: " + abfahrten[i].abfahrtszeit + "<br><br>";
-    }
-    document.getElementById("AbfahrtenAusgabe").innerHTML = abfahrtenArray;
-}
-
-/**
- * Displayes the short version (10 stops) of the Array of the stops
- */
-function displayShort(){
-    for (var i = 0; i < 10; i++){
-        distanceArrayShort[i] = distanceArray[i];
-    }
-
-    // writing the distances in the correct order on the web page
-    document.getElementById('content').innerHTML = distanceArrayShort;
 }
 
 /**
@@ -224,7 +201,7 @@ class Bushalte{
 document.title = "Geosoftware Maxi Elfers";
 
 // setting up and working with the map
-var map = L.map('map').setView([51.96, 7.63], 12);
+var map = L.map('map', {drawControl: true}).setView([51.96, 7.63], 12);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
@@ -237,11 +214,32 @@ var greenIcon = new L.Icon({
     shadowSize: [41, 41]
   });
 
+/**
+ * Displays the user location on the map
+ */
 function displayStandortMap(){
-    var meinStandortMarker = new L.marker([meinStandort.lat, meinStandort.long], {icon: greenIcon});
+    meinStandortMarker = new L.marker([meinStandort.lat, meinStandort.long], {icon: greenIcon});
     meinStandortMarker.addTo(map);
     meinStandortMarker.bindPopup('Hier bist du!');
     meinStandortMarker.openPopup();
-} 
+}
 
+function showMeinStandort(){
+    meinStandortMarker.openPopup();
+    map.flyTo([meinStandort.lat, meinStandort.long], 16);
+}
+
+/**
+ * Displays all stops on the map 
+ */
+function displayAllBushalte(){
+    for(var i = 0; i < bushalteStellen.features.length; i++){
+        aktBushalte = new Bushalte(bushalteStellen.features[i].properties.richtung, bushalteStellen.features[i].properties.lbez, bushalteStellen.features[i].geometry.coordinates[0], bushalteStellen.features[i].geometry.coordinates[1], bushalteStellen.features[i].properties.nr);
+        var distance = distanceCalculation(aktBushalte, meinStandort);
+        new L.marker([bushalteStellen.features[i].geometry.coordinates[1], bushalteStellen.features[i].geometry.coordinates[0]])
+            .bindPopup(bushalteStellen.features[i].properties.lbez + "<br>" + "Entfernung zum Standort: " + distance + " Meter")
+            .openPopup()
+            .addTo(map);
+    }
+}
 

@@ -16,10 +16,6 @@ h1{
     color: yellowgreen;
     text-align: center;
 }
-#AbfahrtenText{
-    display: none;
-    text-align: left;
-}
 #IFGIimg{
     height: 100px;
     float: right;
@@ -32,7 +28,7 @@ h1{
     display: none;
     margin-top: 5px;
 }
-.container-main #GoButtonDiv, .container-main #AbfahrtenDiv, .container-main #KompletteDiv{
+.container-main #GoButtonDiv, .container-main #ZoomDiv{
     text-align: center;
     display: none;
     margin: 5px;
@@ -44,7 +40,7 @@ h1{
     text-align: center;
     margin: 5px;
 }
-#AbfahrtenButton{
+#ZoomButton{
     background-color: rgb(70, 69, 69);
     color: yellowgreen;
 }
@@ -54,4 +50,16 @@ h1{
     margin-left: 10%;
     margin-right: 10%;
     margin-top: 15px; 
+}
+#StandortButton {
+    position:absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    z-index: 400;
+    background-color: aliceblue;
+}
+#StandortButton:hover {
+    background-color: grey;
+    cursor: pointer;
 }
