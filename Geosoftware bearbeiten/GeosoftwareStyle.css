@@ -1,0 +1,57 @@
+.button{
+    background-color: yellowgreen;
+    color:white;
+    border: none;
+    text-align: center;
+    padding: 15px 32px;
+    cursor: pointer;
+    font-size: large;
+}
+p{
+    color: rgb(49, 46, 46);
+    text-align: center;
+    font-size:x-large;
+}
+h1{
+    color: yellowgreen;
+    text-align: center;
+}
+#AbfahrtenText{
+    display: none;
+    text-align: left;
+}
+#IFGIimg{
+    height: 100px;
+    float: right;
+    border: 0px;
+    margin: 0px;
+    position: absolute;
+}
+#ReturnButton, #ReturnButton2{
+    text-align: center;
+    display: none;
+    margin-top: 5px;
+}
+.container-main #GoButtonDiv, .container-main #AbfahrtenDiv, .container-main #KompletteDiv{
+    text-align: center;
+    display: none;
+    margin: 5px;
+}
+.container-main #SubmitButtonDiv{
+    text-align: center;
+}
+#InputDiv{
+    text-align: center;
+    margin: 5px;
+}
+#AbfahrtenButton{
+    background-color: rgb(70, 69, 69);
+    color: yellowgreen;
+}
+#map { 
+    height: 400px;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 15px; 
+}
