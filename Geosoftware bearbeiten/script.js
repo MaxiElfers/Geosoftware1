@@ -18,7 +18,7 @@ document.getElementById("ReturnButton").addEventListener("click", function(){win
 document.getElementById("ReturnButton2").addEventListener("click", function(){window.location.reload()});
 document.getElementById("YourLocation").addEventListener("click",function(){getLocation()});
 document.getElementById("SubmitButton").addEventListener("click",function(){loadBushalteStellenPromises(); displayStandortMap(); hide("SubmitButton"); show("GoButtonDiv"); hide("InputDiv"), show("ReturnButton2"); show("ZoomDiv")});
-document.getElementById("GoButton").addEventListener("click",function(){distance(); displayAllBushalte(); hide("GoButtonDiv"); show("ReturnButton"); hide("ReturnButton2"); loadAbfahrtenPromises()});
+document.getElementById("GoButton").addEventListener("click",function(){distance(); displayAllBushalte(); hide("GoButtonDiv"); show("ReturnButton"); hide("ReturnButton2")});
 document.getElementById("ZoomButton").addEventListener("click", function(){showMeinStandort(); hide("ZoomDiv"); show("DefaultDiv")})
 document.getElementById("DefaultButton").addEventListener("click", function(){showDefault(); show("ZoomDiv"); hide("DefaultDiv")});
 
@@ -119,25 +119,6 @@ fetch("https://rest.busradar.conterra.de/prod/haltestellen")
     })
     .catch(error => console.log(error))
 }
-
-/**
- * Creates an fetch to get the "hatestellen abfahrten" for a specific 
- * haltestelle
- */
- function loadAbfahrtenPromises(){
-    fetch("https://rest.busradar.conterra.de/prod/haltestellen/" + distanceArray[0][distanceArray[0].length-8] + distanceArray[0][distanceArray[0].length-7] + 
-        distanceArray[0][distanceArray[0].length-6] + distanceArray[0][distanceArray[0].length-5] + distanceArray[0][distanceArray[0].length-4] + 
-        distanceArray[0][distanceArray[0].length-3] + distanceArray[0][distanceArray[0].length-2] + "/abfahrten")
-        .then(response => {
-            let res = response.json() // return a Promise as a result
-            res.then(data => { // get the data in the promise result
-                abfahrten = data;
-                console.log(abfahrten);
-            })
-        })
-        .catch(error => console.log(error))
-    }
-
 /**
  * Class Standort to create a objects which describes 
  * a Standort 
@@ -223,7 +204,7 @@ var drawControl = new L.Control.Draw({
         marker: false,
         circle: false,
         polyline: false,
-        rectangle: false,
+        polygon: false,
     },
     edit: {
         featureGroup: drawnItems,
