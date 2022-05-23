@@ -11,6 +11,7 @@ let bushalteStellen;
 let abfahrten;
 let aktBushalte;
 let meinStandortMarker;
+let allBushalte = [];
 
 //list of all EventListeners
 document.getElementById("ReturnButton").addEventListener("click", function(){window.location.reload()});
@@ -18,7 +19,8 @@ document.getElementById("ReturnButton2").addEventListener("click", function(){wi
 document.getElementById("YourLocation").addEventListener("click",function(){getLocation()});
 document.getElementById("SubmitButton").addEventListener("click",function(){loadBushalteStellenPromises(); displayStandortMap(); hide("SubmitButton"); show("GoButtonDiv"); hide("InputDiv"), show("ReturnButton2"); show("ZoomDiv")});
 document.getElementById("GoButton").addEventListener("click",function(){distance(); displayAllBushalte(); hide("GoButtonDiv"); show("ReturnButton"); hide("ReturnButton2"); loadAbfahrtenPromises()});
-document.getElementById("ZoomButton").addEventListener("click", function(){showMeinStandort()})
+document.getElementById("ZoomButton").addEventListener("click", function(){showMeinStandort(); hide("ZoomDiv"); show("DefaultDiv")})
+document.getElementById("DefaultButton").addEventListener("click", function(){showDefault(); show("ZoomDiv"); hide("DefaultDiv")});
 
 /**
  * Is the function to calculate all distances between a given bushalte Stellen 
@@ -201,7 +203,7 @@ class Bushalte{
 document.title = "Geosoftware Maxi Elfers";
 
 // setting up and working with the map
-var map = L.map('map', {drawControl: true}).setView([51.96, 7.63], 12);
+var map = L.map('map').setView([51.96, 7.63], 12);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
@@ -213,6 +215,44 @@ var greenIcon = new L.Icon({
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
   });
+var drawnItems = new L.FeatureGroup();
+map.addLayer(drawnItems);
+var drawControl = new L.Control.Draw({
+    draw: {
+        circlemarker: false,
+        marker: false,
+        circle: false,
+        polyline: false,
+        rectangle: false,
+    },
+    edit: {
+        featureGroup: drawnItems,
+        remove: false,
+        edit: false
+    }
+});
+map.addControl(drawControl);
+
+/**
+ * handles the draw event for a rectangle to show only the marker, 
+ * that are inside the polygon
+ */
+map.on(L.Draw.Event.CREATED, function (e) {
+    for(var i = 0; i < allBushalte.length; i++){
+        allBushalte[i].remove();
+        var pt = turf.point([allBushalte[i]._latlng.lat, allBushalte[i]._latlng.lng]);
+        var poly = turf.polygon([[
+            [e.layer._latlngs[0][0].lat, e.layer._latlngs[0][0].lng],
+            [e.layer._latlngs[0][1].lat, e.layer._latlngs[0][1].lng],
+            [e.layer._latlngs[0][2].lat, e.layer._latlngs[0][2].lng],
+            [e.layer._latlngs[0][3].lat, e.layer._latlngs[0][3].lng],
+            [e.layer._latlngs[0][0].lat, e.layer._latlngs[0][0].lng]
+        ]]);
+        if(turf.booleanPointInPolygon(pt, poly)){
+            allBushalte[i].addTo(map);
+        }
+    }
+ });
 
 /**
  * Displays the user location on the map
@@ -224,22 +264,34 @@ function displayStandortMap(){
     meinStandortMarker.openPopup();
 }
 
+/**
+ * Zooms on the user location
+ */
 function showMeinStandort(){
     meinStandortMarker.openPopup();
     map.flyTo([meinStandort.lat, meinStandort.long], 16);
 }
 
 /**
- * Displays all stops on the map 
+ * Zooms to the default view
+ */
+function showDefault(){
+    meinStandortMarker.openPopup();
+    map.flyTo([51.96, 7.63], 12);
+}
+
+/**
+ * Displays all stops on the map and saves the marker in an Array
  */
 function displayAllBushalte(){
     for(var i = 0; i < bushalteStellen.features.length; i++){
         aktBushalte = new Bushalte(bushalteStellen.features[i].properties.richtung, bushalteStellen.features[i].properties.lbez, bushalteStellen.features[i].geometry.coordinates[0], bushalteStellen.features[i].geometry.coordinates[1], bushalteStellen.features[i].properties.nr);
         var distance = distanceCalculation(aktBushalte, meinStandort);
-        new L.marker([bushalteStellen.features[i].geometry.coordinates[1], bushalteStellen.features[i].geometry.coordinates[0]])
+        var marker = new L.marker([bushalteStellen.features[i].geometry.coordinates[1], bushalteStellen.features[i].geometry.coordinates[0]])
             .bindPopup(bushalteStellen.features[i].properties.lbez + "<br>" + "Entfernung zum Standort: " + distance + " Meter")
             .openPopup()
-            .addTo(map);
+        allBushalte[i] = marker;
+        marker.addTo(map);
     }
 }
 

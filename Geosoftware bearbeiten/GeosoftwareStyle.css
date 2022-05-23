@@ -28,7 +28,7 @@ h1{
     display: none;
     margin-top: 5px;
 }
-.container-main #GoButtonDiv, .container-main #ZoomDiv{
+.container-main #GoButtonDiv, .container-main #ZoomDiv, .container-main #DefaultDiv{
     text-align: center;
     display: none;
     margin: 5px;
@@ -40,7 +40,7 @@ h1{
     text-align: center;
     margin: 5px;
 }
-#ZoomButton{
+#ZoomButton, #DefaultButton{
     background-color: rgb(70, 69, 69);
     color: yellowgreen;
 }
