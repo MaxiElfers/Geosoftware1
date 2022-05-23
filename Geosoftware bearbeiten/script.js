@@ -12,6 +12,8 @@ let abfahrten;
 let aktBushalte;
 let meinStandortMarker;
 let allBushalte = [];
+var pt; // for calculating the marker inside the bounding box
+var poly; // for calculating the marker inside the bounding box
 
 //list of all EventListeners
 document.getElementById("ReturnButton").addEventListener("click", function(){window.location.reload()});
@@ -204,7 +206,7 @@ var drawControl = new L.Control.Draw({
         marker: false,
         circle: false,
         polyline: false,
-        polygon: false,
+        polygon: false
     },
     edit: {
         featureGroup: drawnItems,
@@ -219,18 +221,36 @@ map.addControl(drawControl);
  * that are inside the polygon
  */
 map.on(L.Draw.Event.CREATED, function (e) {
-    for(var i = 0; i < allBushalte.length; i++){
-        allBushalte[i].remove();
-        var pt = turf.point([allBushalte[i]._latlng.lat, allBushalte[i]._latlng.lng]);
-        var poly = turf.polygon([[
-            [e.layer._latlngs[0][0].lat, e.layer._latlngs[0][0].lng],
-            [e.layer._latlngs[0][1].lat, e.layer._latlngs[0][1].lng],
-            [e.layer._latlngs[0][2].lat, e.layer._latlngs[0][2].lng],
-            [e.layer._latlngs[0][3].lat, e.layer._latlngs[0][3].lng],
-            [e.layer._latlngs[0][0].lat, e.layer._latlngs[0][0].lng]
-        ]]);
-        if(turf.booleanPointInPolygon(pt, poly)){
-            allBushalte[i].addTo(map);
+    console.log(e);
+    if(e.layerType === "rectangle"){
+        for(var i = 0; i < allBushalte.length; i++){
+            allBushalte[i].remove();
+            pt = turf.point([allBushalte[i]._latlng.lat, allBushalte[i]._latlng.lng]);
+            poly = turf.polygon([[
+                [e.layer._latlngs[0][0].lat, e.layer._latlngs[0][0].lng],
+                [e.layer._latlngs[0][1].lat, e.layer._latlngs[0][1].lng],
+                [e.layer._latlngs[0][2].lat, e.layer._latlngs[0][2].lng],
+                [e.layer._latlngs[0][3].lat, e.layer._latlngs[0][3].lng],
+                [e.layer._latlngs[0][0].lat, e.layer._latlngs[0][0].lng]
+            ]]);
+            if(turf.booleanPointInPolygon(pt, poly)){
+                allBushalte[i].addTo(map);
+            }
+        }
+    }
+    // I tried to add an bounding box with a polygon, but I could not find a way to make the turf.polygon 
+    // length be different according to the number of points of the drawn polygon   
+    if(e.layerType === "polygon"){
+        for(var i = 0; i < allBushalte.length; i++){
+            allBushalte[i].remove();
+            pt = turf.point([allBushalte[i]._latlng.lat, allBushalte[i]._latlng.lng]);
+            poly = turf.polygon({length: 5});
+            for(var j = 0; j < e.layer._latlngs[0].length; j++){
+                poly[j] = [e.layer._latlngs[0][j].lat, e.layer._latlngs[0][j].lng];
+            }
+            if(turf.booleanPointInPolygon(pt, poly)){
+                allBushalte[i].addTo(map);
+            }
         }
     }
  });
