@@ -1,0 +1,119 @@
+body{
+    font-size: 16px;
+    color: #fff;
+    background-color: rgb(100, 160, 9);
+}
+#header-nav{
+    background-color: #fff;
+    border-radius: 0;
+    border: 0;
+}
+.navbar-brand{
+    padding-top: 25px;
+}
+.navbar-brand a{
+    text-decoration: none;
+}
+.navbar-brand h1{
+    color: rgb(100, 160, 9);
+    font-size: 2em;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgb(0, 0, 0);
+    margin-bottom: 0;
+    margin-top: 50px;
+    margin-left: 10px;
+}
+.navbar-brand a:hover, .navbar-brand a:focus{
+    text-decoration: none;
+}
+#logo-img{
+    background: url(img/csm_1623743845_DAH_Logo_ifgi_long_2b4c356743.png);
+    width: 170px;
+    height: 170px;
+    margin: 10px 15px 10px 0;
+}
+#nav-list{
+    margin: 30px;
+}
+#nav-list a{
+    color:rgb(100, 160, 9);
+    text-align: center;
+}
+#nav-list a:hover{
+    background-color: rgb(100, 160, 9);
+    color: #fff;
+}
+#nav-list a span{
+    font-size: 1.5em;
+}
+.navbar-header button.navbar-toggle, .navbar-header .icon-bar{
+    border: 1px solid rgb(100, 160, 9);
+}
+.navbar-header button.navbar-toggle{
+    clear: both;
+    margin-top: -30px;
+}
+#collapsable-nav #nav-list{
+    margin-top: 50px;
+}
+#collapsable-nav a{
+    font-size: 1.2em;
+}
+#collapsable-nav a span{
+    font-size: 1em;
+    padding-right: 10px;
+}
+#collapsable-nav{
+    text-align: center;
+}
+#Aufgabe2-tile, #Aufgabe4-tile, #Impressum-tile{
+    height: 250px;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    border: 2px solid #fff;
+    margin-top: 30px;
+}
+#Aufgabe2-tile:hover, #Aufgabe4-tile:hover, #Impressum-tile:hover{
+    box-shadow: 0 1px 5px 1px #fff;
+}
+#Aufgabe2-tile span, #Aufgabe4-tile span, #Impressum-tile span{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+    width: 100%;
+    font-size: 1.6em;
+    background-color: #000;
+    color: #fff;
+    opacity: .8;
+}
+#Aufgabe2-tile{
+    background-image: url("img/Aufgabe2-555x250.jpg");
+    background-position: center;
+}
+#Aufgabe4-tile{
+    background-image: url("img/Aufgabe4-555x250.jpg");
+    background-position: center;
+}
+#Impressum-tile{
+    background-image: url("img/Impressum-720x250.jpg");
+    background-position: center;
+}
+.panel-footer{
+    margin-top: 30px;
+    padding-top: 35px;
+    background-color: rgb(49, 46, 46);
+    border-top: 0;
+    text-align: center;
+    color: #fff;
+}
+.panel-footer span{
+    font-size: 1.3em;
+    color: rgb(100, 160, 9);
+}
+#werbungergaenzung{
+    color: gray;
+    font-size: 1.5em;
+    opacity: .6;
+}
